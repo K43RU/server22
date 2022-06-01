@@ -19,8 +19,15 @@ function buscarPessoas(){
     return listaPessoas;
 }
 
-function adicionarPessoa(){
-    
+router.post('/', (req, res) => {
+    res.json(adicionarPessoa(req))
+})
+
+function adicionarPessoa(req){
+    const pessoa = req.body;
+    pessoa.id = listaPessoas.length + 1;
+    listaPessoas.push(pessoa);
+    res.json(pessoa);
 }
 
 function buscarPessoa(id){
@@ -30,5 +37,6 @@ function buscarPessoa(id){
 
 module.exports = {
     router,
-    buscarPessoa
+    buscarPessoa,
+    adicionarPessoa
 }
