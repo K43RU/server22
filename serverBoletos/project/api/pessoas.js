@@ -27,7 +27,17 @@ function adicionarPessoa(req){
     const pessoa = req.body;
     pessoa.id = listaPessoas.length + 1;
     listaPessoas.push(pessoa);
-    res.json(pessoa);
+    return(pessoa);
+}
+
+router.delete('/:id', (req, res) => {
+    res.json(removerPessoa(req.params.id));
+})
+
+function removerPessoa(id){
+    index = listaPessoas.findIndex(p => p.id == id);
+    listaPessoas.splice(index, 1);
+    return(listaPessoas);
 }
 
 function buscarPessoa(id){
@@ -35,8 +45,24 @@ function buscarPessoa(id){
     return (pessoa);
 }
 
+router.put('/:id', (req, res) => {
+    res.json(editarPessoa(req, req.params.id));
+})
+
+function editarPessoa(req, id){
+    const pessoa = req.body;
+    const index = listaPessoas.findIndex(p => p.id == id);
+    pessoa.id = id;
+    listaPessoas[index] = pessoa;
+    return (pessoa);
+}
+
+
+
 module.exports = {
     router,
     buscarPessoa,
-    adicionarPessoa
+    adicionarPessoa,
+    removerPessoa,
+    editarPessoa
 }
