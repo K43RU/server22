@@ -20,14 +20,18 @@ function buscarPessoas(){
 }
 
 router.post('/', (req, res) => {
-    res.json(adicionarPessoa(req))
+    res.json(adicionarPessoa(req));
 })
 
 function adicionarPessoa(req){
     const pessoa = req.body;
+    if(pessoa.nome == '' || pessoa.cpf == ''){
+        Res.Status(400).send("Não encontrado sua anta!");
+    }else{
     pessoa.id = listaPessoas.length + 1;
     listaPessoas.push(pessoa);
     return(pessoa);
+    }
 }
 
 router.delete('/:id', (req, res) => {
