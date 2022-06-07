@@ -20,28 +20,32 @@ function buscarPessoas(){
 }
 
 router.post('/', (req, res) => {
-    res.json(adicionarPessoa(req));
+    res.json(adicionarPessoa(req, res));
 })
 
-function adicionarPessoa(req){
+function adicionarPessoa(req, res){
     const pessoa = req.body;
-    if(pessoa.nome == '' || pessoa.cpf == ''){
-        Res.Status(400).send("Não encontrado sua anta!");
+    if(pessoa.nome != undefined && pessoa.cpf != undefined){
+        pessoa.id = listaPessoas.length + 1;
+        listaPessoas.push(pessoa);
+        return(pessoa);
     }else{
-    pessoa.id = listaPessoas.length + 1;
-    listaPessoas.push(pessoa);
-    return(pessoa);
+        return(res.status(400).send("nome ou cpf não inserido"));
     }
 }
 
 router.delete('/:id', (req, res) => {
-    res.json(removerPessoa(req.params.id));
+    res.json(removerPessoa(req.params.id, res));
 })
 
-function removerPessoa(id){
+function removerPessoa(id, res){
     index = listaPessoas.findIndex(p => p.id == id);
-    listaPessoas.splice(index, 1);
-    return(listaPessoas);
+    if(index == -1){
+        return res.status(400).send("usuário inexistente");
+    }else{
+        listaPessoas.splice(index, 1);
+        return(listaPessoas);
+    }
 }
 
 function buscarPessoa(id){
