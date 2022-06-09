@@ -8,8 +8,17 @@ listaPessoas = [
 ]
 
 router.get('/:id', (req, res) => {
-    res.json(buscarPessoa(req.params.id));
+    res.json(buscarPessoa(req.params.id, res));
 });
+
+function buscarPessoa(id, res){
+    const pessoa = listaPessoas.find(p => p.id == id);
+    if(pessoa != undefined){
+        return (pessoa);
+    }else{
+        return res.status(400).send("usuário inexistente");
+    }
+}
 
 router.get('/', (req, res) => {
     res.json(listaPessoas);
@@ -46,11 +55,6 @@ function removerPessoa(id, res){
         listaPessoas.splice(index, 1);
         return(listaPessoas);
     }
-}
-
-function buscarPessoa(id){
-    const pessoa = listaPessoas.find(p => p.id == id);
-    return (pessoa);
 }
 
 router.put('/:id', (req, res) => {
