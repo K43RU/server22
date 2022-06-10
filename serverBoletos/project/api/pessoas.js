@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router(); 
+const boletos = require('./boletos');
+const listaBoleto = boletos.listaBoletos; 
 
 listaPessoas = [
     {id: 1, nome: "Pedro", cpf: "123456789-00"},
@@ -48,9 +50,15 @@ router.delete('/:id', (req, res) => {
 })
 
 function removerPessoa(id, res){
+    boletoPessoa = listaBoleto.find(b => b.idPessoa == id)
     index = listaPessoas.findIndex(p => p.id == id);
-    if(index == -1){
-        return res.status(400).send("usuário inexistente");
+    if(index == -1 || boletoPessoa != undefined){
+        if(index == -1){
+            return res.status(400).send("usuário inexistente");
+        }else{
+            return res.status(400).send("usuário já está vinculado a um boleto");
+
+        }
     }else{
         listaPessoas.splice(index, 1);
         return(listaPessoas);

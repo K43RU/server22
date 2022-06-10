@@ -3,8 +3,7 @@ const router = express.Router();
 
 listaBoletos = [
     {'id': 1, 'Valor': 20, 'idPessoa': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
-    {'id': 2, 'Valor': 10, 'idPessoa': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
-    {'id': 3, 'Valor': 10, 'idPessoa': '2', 'status': 'pago', 'nomePessoa': 'Vytor'},
+    {'id': 3, 'Valor': 10, 'idPessoa': '1', 'status': 'pago', 'nomePessoa': 'Vytor'},
     {'id': 4, 'Valor': 10, 'idPessoa': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
 ]
 
@@ -30,7 +29,7 @@ router.get('/', (req, res) => {
     res.json(listaBoletos);
 })
 
-function buscarboleto(){
+function buscarBoletos(){
     return listaBoletos;
 }
 
@@ -72,8 +71,10 @@ function editarboleto(req, id){
 module.exports = {
     router,
     buscarBoleto,
+    buscarBoletos,
     Adicionarboleto,
     removerboleto,
     editarboleto,
-    buscarBoletoPessoa
+    buscarBoletoPessoa,
+    listaBoletos
 }
