@@ -51,7 +51,7 @@ router.delete('/:id', (req, res) => {
 })
 
 function removerUsuario(id, res){
-    boletoPessoa = listaBoleto.find(b => b.idPessoa == id)
+    boletoPessoa = listaBoleto.find(b => b.idUsuario == id)
     index = listaUsuarios.findIndex(p => p.id == id);
     if(index == -1 || boletoPessoa != undefined){
         if(index == -1){
@@ -86,5 +86,6 @@ module.exports = {
     buscarUsuario,
     AdicionarUsuario,
     removerUsuario,
-    editarUsuario
+    editarUsuario,
+    listaUsuarios
 }

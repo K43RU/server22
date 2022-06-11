@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router(); 
 
+const pessoas = require('./pessoas');
+const listaPessoas = pessoas.listaPessoas;
+const usuarios = require('./pessoas');
+const listaUsuarios = usuarios.listaUsuarios;
+
 listaBoletos = [
-    {'id': 1, 'Valor': 20, 'idPessoa': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
-    {'id': 3, 'Valor': 10, 'idPessoa': '1', 'status': 'pago', 'nomePessoa': 'Vytor'},
-    {'id': 4, 'Valor': 10, 'idPessoa': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
+    {'id': 1, 'Valor': 20, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
+    {'id': 3, 'Valor': 10, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Vytor'},
+    {'id': 4, 'Valor': 10, 'idPessoa': '3', 'idUsuario': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
 ]
 
 router.get('/:id', (req, res) => {
@@ -34,11 +39,20 @@ function buscarBoletos(){
 }
 
 router.post('/', (req, res) => {
-    res.json(Adicionarboleto(req))
+    res.json(Adicionarboleto(req, res))
 })
 
-function Adicionarboleto(req){
+function Adicionarboleto(req, res){
     const boleto = req.body;
+    const pessoa = listaPessoas.findIndex(p => p.idPessoa == boleto.idPessoa);
+    const usuario = listaUsuarios.findIndex(p => p.idUsuario == boleto.idUsuario);
+    if(boleto.Valor < 0){
+        return res.status(400).send("o valor não pode ser negativo");
+    }else if(pessoa == -1){
+        return res.status(400).send("pessoa inexistente");
+    }else if(usuario == -1){
+        return res.status(400).send("usuário inexistente");
+    }
     boleto.id = listaBoletos.length + 1;
     listaBoletos.push(boleto);
     return(boleto);

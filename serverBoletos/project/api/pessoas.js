@@ -54,9 +54,9 @@ function removerPessoa(id, res){
     index = listaPessoas.findIndex(p => p.id == id);
     if(index == -1 || boletoPessoa != undefined){
         if(index == -1){
-            return res.status(400).send("usuário inexistente");
+            return res.status(400).send("pessoa inexistente");
         }else{
-            return res.status(400).send("usuário já está vinculado a um boleto");
+            return res.status(400).send("pessoa já está vinculada a um boleto");
 
         }
     }else{
@@ -84,5 +84,6 @@ module.exports = {
     buscarPessoa,
     adicionarPessoa,
     removerPessoa,
-    editarPessoa
+    editarPessoa,
+    listaPessoas
 }
