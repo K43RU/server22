@@ -1,13 +1,15 @@
 const express = require('express');
-const router = express.Router(); 
+const router = express.Router();
 
-const pessoas = require('./pessoas');
-const listaPessoas = pessoas.listaPessoas;
+const pessoa = require('./pessoas');
+const pessoas = pessoa.listaPessoas;
+const usuario = require('./pessoas');
+const usuarios = usuario.listaUsuarios;
 
 listaBoletos = [
     {'id': 1, 'Valor': 20, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
-    {'id': 3, 'Valor': 10, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Vytor'},
-    {'id': 4, 'Valor': 10, 'idPessoa': '3', 'idUsuario': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
+    {'id': 2, 'Valor': 10, 'idPessoa': '1', 'idUsuario': '2', 'status': 'pago', 'nomePessoa': 'Vytor'},
+    {'id': 3, 'Valor': 10, 'idPessoa': '3', 'idUsuario': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
 ]
 
 router.get('/:id', (req, res) => {
@@ -24,8 +26,10 @@ router.get('/pessoa/:id', (req, res) => {
 });
 
 function buscarBoletoPessoa(id){
+    for(let i = 0; i < listaBoletos.length; i++){
     const boleto = listaBoletos.find(p => p.idPessoa == id);
-    return (boleto);
+    return boleto;
+    }
 }
 
 router.get('/', (req, res) => {
@@ -37,21 +41,19 @@ function buscarBoletos(){
 }
 
 router.post('/', (req, res) => {
-    res.json(Adicionarboleto(req, res))
+    res.json(Adicionarboleto(req, res));
 })
 
 function Adicionarboleto(req, res){
     const boleto = req.body;
-    const idPessoa = listaBoletos.find(boleto.idPessoa);
-    const pessoa = listaPessoas.findIndex(p => p.id == idPessoa);
-    if(boleto.Valor < 0){
-        return res.status(400).send("o valor não pode ser negativo");
-    }else if(pessoa == -1){
-        return res.status(400).send("pessoa inexistente");
-    }else{
-    boleto.id = listaBoletos.length + 1;
-    listaBoletos.push(boleto);
-    return(boleto);
+    const indexPessoa = listaPessoas.findIndex(p => p.id == boleto.idPessoa);
+    if(indexPessoa == -1){
+    return res.status(400).send("o valor não pode ser negativo");
+    }
+    else{
+        boleto.id = listaBoletos.length + 1;
+        listaBoletos.push(boleto);
+        return(boleto);
     }
 }
 
