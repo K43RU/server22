@@ -8,7 +8,7 @@ const usuarios = usuario.listaUsuarios;
 
 listaBoletos = [
     {'id': 1, 'Valor': 20, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
-    {'id': 2, 'Valor': 10, 'idPessoa': '1', 'idUsuario': '2', 'status': 'pago', 'nomePessoa': 'Vytor'},
+    {'id': 2, 'Valor': 10, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Vytor'},
     {'id': 3, 'Valor': 10, 'idPessoa': '3', 'idUsuario': '3', 'status': 'pago', 'nomePessoa': 'Gerson'}
 ]
 
@@ -22,13 +22,20 @@ function buscarBoleto(id){
 }
 
 router.get('/pessoa/:id', (req, res) => {
-    res.json(buscarBoletoPessoa(req.params.id));
+    res.json(buscarBoletoPessoa(req.params.id, res));
 });
 
-function buscarBoletoPessoa(id){
-    for(let i = 0; i < listaBoletos.length; i++){
-    const boleto = listaBoletos.find(p => p.idPessoa == id);
-    return boleto;
+function buscarBoletoPessoa(id, res){
+    const listaBoletosPessoa = [];
+    for(let i = 0; i < listaBoletos.length; i++){ 
+    if(listaBoletos[i].idPessoa == id){
+        listaBoletosPessoa.push(listaBoletos[i]);
+    }
+    }
+    if(listaBoletosPessoa.length > 0){
+    return listaBoletosPessoa;
+    }else{
+        return res.status(400).send("pessoa não tem boletos");
     }
 }
 
@@ -47,8 +54,15 @@ router.post('/', (req, res) => {
 function Adicionarboleto(req, res){
     const boleto = req.body;
     const indexPessoa = listaPessoas.findIndex(p => p.id == boleto.idPessoa);
-    if(indexPessoa == -1){
-    return res.status(400).send("o valor não pode ser negativo");
+    const indexUsuario = listaBoletos.findIndex(p => p.id == boleto.idUsuario);
+    if(indexPessoa == -1 || boleto.Valor < 0 || indexUsuario == -1){
+        if(indexPessoa == -1){
+            return res.status(400).send("pessoa inexistente");
+        }else if(boleto.Valor < 0){
+            return res.status(400).send("o valor não pode ser negativo");
+        }else if(indexUsuario == -1){
+            return res.status(400).send("usuario inexistente");
+        }
     }
     else{
         boleto.id = listaBoletos.length + 1;
@@ -58,13 +72,17 @@ function Adicionarboleto(req, res){
 }
 
 router.delete('/:id', (req, res) => {
-    res.json(removerboleto(req.params.id));
+    res.json(removerboleto(req.params.id, res));
 })
 
-function removerboleto(id){
+function removerboleto(id, res){
     index = listaBoletos.findIndex(p => p.id == id);
+    if(index != -1){
     listaBoletos.splice(index, 1);
     return(listaBoletos);
+    }else{
+        return res.status(400).send("esse boleto não existe meu chapa");
+    }
 }
 
 router.put('/:id', (req, res) => {
