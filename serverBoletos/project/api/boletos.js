@@ -3,8 +3,6 @@ const router = express.Router();
 
 const pessoas = require('./pessoas');
 const listaPessoas = pessoas.listaPessoas;
-const usuarios = require('./pessoas');
-const listaUsuarios = usuarios.listaUsuarios;
 
 listaBoletos = [
     {'id': 1, 'Valor': 20, 'idPessoa': '1', 'idUsuario': '1', 'status': 'pago', 'nomePessoa': 'Pedro'},
@@ -44,18 +42,17 @@ router.post('/', (req, res) => {
 
 function Adicionarboleto(req, res){
     const boleto = req.body;
-    const pessoa = listaPessoas.findIndex(p => p.idPessoa == boleto.idPessoa);
-    const usuario = listaUsuarios.findIndex(p => p.idUsuario == boleto.idUsuario);
+    const idPessoa = listaBoletos.find(boleto.idPessoa);
+    const pessoa = listaPessoas.findIndex(p => p.id == idPessoa);
     if(boleto.Valor < 0){
         return res.status(400).send("o valor não pode ser negativo");
     }else if(pessoa == -1){
         return res.status(400).send("pessoa inexistente");
-    }else if(usuario == -1){
-        return res.status(400).send("usuário inexistente");
-    }
+    }else{
     boleto.id = listaBoletos.length + 1;
     listaBoletos.push(boleto);
     return(boleto);
+    }
 }
 
 router.delete('/:id', (req, res) => {
